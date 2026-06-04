@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crucipuzzle: COMPLE..ter..ANNO?</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 5px;
+            font-size: 28px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            max-width: 1000px;
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        @media (max-width: 800px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        .grid-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 40px);
+            grid-template-rows: repeat(12, 40px);
+            gap: 4px;
+            user-select: none;
+        }
+        .cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .cell:hover {
+            background-color: #e2e8f0;
+            transform: scale(1.05);
+        }
+        .cell.highlighted {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #2563eb;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+        }
+        .word-list-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            max-width: 400px;
+        }
+        h2 {
+            color: #1e3a8a;
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .word-item {
+            padding: 6px 10px;
+            background-color: #f8fafc;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
+            border-left: 3px solid #cbd5e1;
+        }
+        .word-item:hover {
+            background-color: #f1f5f9;
+        }
+        .word-item.found {
+            text-decoration: line-through;
+            color: #94a3b8;
+            background-color: #f1f5f9;
+            border-left-color: #94a3b8;
+            opacity: 0.7;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-reset {
+            background-color: #ef4444;
+            color: white;
+        }
+        .btn-reset:hover {
+            background-color: #dc2626;
+        }
+        .footer-text {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Crucipuzzle: COMPLE..ter..ANNO?</h1>
+    <div class="subtitle">Clicca sulle lettere per evidenziarle e sulle parole nell'elenco per depennarle.</div>
+
+    <div class="container">
+        <!-- Schema di Gioco -->
+        <div class="grid-container">
+            <h2>Schema delle Lettere</h2>
+            <div class="grid" id="puzzle-grid">
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">L</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">S</div>
+                <div class="cell" onclick="toggleCell(this)">P</div>
+                <div class="cell" onclick="toggleCell(this)">U</div>
+                <div class="cell" onclick="toggleCell(this)">M</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">S</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">P</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">S</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">S</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">F</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">G</div>
+                <div class="cell" onclick="toggleCell(this)">G</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">M</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">L</div>
+                <div class="cell" onclick="toggleCell(this)">L</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">P</div>
+                <div class="cell" onclick="toggleCell(this)">S</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">M</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">U</div>
+                <div class="cell" onclick="toggleCell(this)">V</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">L</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">Q</div>
+                <div class="cell" onclick="toggleCell(this)">U</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">S</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">U</div>
+                <div class="cell" onclick="toggleCell(this)">G</div>
+                <div class="cell" onclick="toggleCell(this)">U</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">F</div>
+                <div class="cell" onclick="toggleCell(this)">S</div>
+                <div class="cell" onclick="toggleCell(this)">L</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">M</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">Z</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">F</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">U</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">P</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">G</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">S</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">T</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">H</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">C</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">E</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">R</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">I</div>
+                <div class="cell" onclick="toggleCell(this)">F</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">A</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+                <div class="cell" onclick="toggleCell(this)">O</div>
+                <div class="cell" onclick="toggleCell(this)">N</div>
+            </div>
+            <div class="controls">
+                <button class="btn-reset" onclick="resetGame()">Azzera Selezione</button>
+            </div>
+        </div>
+
+        <!-- Elenco Parole -->
+        <div class="word-list-container">
+            <h2>Parole da Trovare</h2>
+            <div class="word-list">
+                <div class="word-item" onclick="toggleWord(this)">AMICI</div>
+                <div class="word-item" onclick="toggleWord(this)">ANNI</div>
+                <div class="word-item" onclick="toggleWord(this)">AUGURI</div>
+                <div class="word-item" onclick="toggleWord(this)">CARTA</div>
+                <div class="word-item" onclick="toggleWord(this)">CERONE</div>
+                <div class="word-item" onclick="toggleWord(this)">CINQUANTASEI</div>
+                <div class="word-item" onclick="toggleWord(this)">CONFETTI</div>
+                <div class="word-item" onclick="toggleWord(this)">CUORE</div>
+                <div class="word-item" onclick="toggleWord(this)">EROS</div>
+                <div class="word-item" onclick="toggleWord(this)">ESCA</div>
+                <div class="word-item" onclick="toggleWord(this)">FAUNA</div>
+                <div class="word-item" onclick="toggleWord(this)">FESTA</div>
+                <div class="word-item" onclick="toggleWord(this)">FIOCCHI</div>
+                <div class="word-item" onclick="toggleWord(this)">FIORI</div>
+                <div class="word-item" onclick="toggleWord(this)">GEMELLI</div>
+                <div class="word-item" onclick="toggleWord(this)">GIARA</div>
+                <div class="word-item" onclick="toggleWord(this)">GIUGNO</div>
+                <div class="word-item" onclick="toggleWord(this)">GUANTO</div>
+                <div class="word-item" onclick="toggleWord(this)">LATI</div>
+                <div class="word-item" onclick="toggleWord(this)">LESA</div>
+                <div class="word-item" onclick="toggleWord(this)">MARCO</div>
+                <div class="word-item" onclick="toggleWord(this)">MUSICA</div>
+                <div class="word-item" onclick="toggleWord(this)">NERE</div>
+                <div class="word-item" onclick="toggleWord(this)">NOCE</div>
+                <div class="word-item" onclick="toggleWord(this)">NONNA</div>
+                <div class="word-item" onclick="toggleWord(this)">NOTTE</div>
+                <div class="word-item" onclick="toggleWord(this)">NUVOLA</div>
+                <div class="word-item" onclick="toggleWord(this)">ONCIA</div>
+                <div class="word-item" onclick="toggleWord(this)">ORECCHIE</div>
+                <div class="word-item" onclick="toggleWord(this)">PACCO</div>
+                <div class="word-item" onclick="toggleWord(this)">PREMIO</div>
+                <div class="word-item" onclick="toggleWord(this)">QUATTRO</div>
+                <div class="word-item" onclick="toggleWord(this)">REGALI</div>
+                <div class="word-item" onclick="toggleWord(this)">SORPRESA</div>
+                <div class="word-item" onclick="toggleWord(this)">SPILLE</div>
+                <div class="word-item" onclick="toggleWord(this)">SPUMANTE</div>
+                <div class="word-item" onclick="toggleWord(this)">STILE</div>
+                <div class="word-item" onclick="toggleWord(this)">SUMO</div>
+                <div class="word-item" onclick="toggleWord(this)">TIRI</div>
+                <div class="word-item" onclick="toggleWord(this)">TORTA</div>
+                <div class="word-item" onclick="toggleWord(this)">TRENTINA</div>
+                <div class="word-item" onclick="toggleWord(this)">VITA</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-text">
+        Crucipuzzle: COMPLE..ter..ANNO? (Stoppi). Le lettere restanti non evidenziate formeranno la soluzione del gioco.
+    </div>
+
+    <script>
+        function toggleCell(cell) {
+            cell.classList.toggle('highlighted');
+        }
+
+        function toggleWord(wordItem) {
+            wordItem.classList.toggle('found');
+        }
+
+        function resetGame() {
+            if (confirm('Vuoi davvero azzerare tutto il progresso?')) {
+                document.querySelectorAll('.cell').forEach(cell => {
+                    cell.classList.remove('highlighted');
+                });
+                document.querySelectorAll('.word-item').forEach(item => {
+                    item.classList.remove('found');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
